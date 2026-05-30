@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC Incident Enrichment Report — 2026-05-30 10:05:22 UTC</title>
+  <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+            background: #0d1117; color: #c9d1d9; min-height: 100vh;
+        }
+        a { color: #58a6ff; }
+        header {
+            background: #161b22; border-bottom: 1px solid #30363d;
+            padding: 20px 32px; display: flex; align-items: center; gap: 16px;
+        }
+        header .logo {
+            width: 40px; height: 40px; background: #f85149;
+            border-radius: 8px; display: flex; align-items: center;
+            justify-content: center; font-size: 20px; flex-shrink: 0;
+        }
+        header h1 { font-size: 1.25rem; color: #f0f6fc; }
+        header p  { font-size: 0.8rem; color: #8b949e; margin-top: 2px; }
+        main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px; margin-bottom: 32px;
+        }
+        .stat-card {
+            background: #161b22; border: 1px solid #30363d;
+            border-radius: 10px; padding: 20px 16px; text-align: center;
+        }
+        .stat-card .num  { font-size: 2rem; font-weight: 700; color: #f0f6fc; }
+        .stat-card .num.red    { color: #f85149; }
+        .stat-card .num.orange { color: #d29922; }
+        .stat-card .num.blue   { color: #388bfd; }
+        .stat-card .num.green  { color: #3fb950; }
+        .stat-card .lbl { font-size: 0.75rem; color: #8b949e; margin-top: 4px; }
+
+        h2.section-title {
+            font-size: 1rem; color: #8b949e; text-transform: uppercase;
+            letter-spacing: .08em; margin-bottom: 16px;
+            border-bottom: 1px solid #30363d; padding-bottom: 8px;
+        }
+
+        .alert-card {
+            background: #161b22; border: 1px solid #30363d;
+            border-radius: 10px; margin-bottom: 24px; overflow: hidden;
+        }
+        .alert-header {
+            padding: 16px 20px; border-bottom: 1px solid #30363d;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+        }
+        .alert-header .alert-id { font-weight: 700; color: #f0f6fc; font-size: 1rem; }
+        .alert-header .spacer   { flex: 1; }
+        .alert-meta { padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+        .alert-meta .field      { font-size: 0.82rem; color: #8b949e; }
+        .alert-meta .value      { font-size: 0.82rem; color: #c9d1d9; font-family: monospace; }
+
+        .risk-row { padding: 12px 20px; border-top: 1px solid #30363d; display: flex; align-items: center; gap: 16px; }
+        .score-bar-wrap { flex: 1; height: 8px; background: #21262d; border-radius: 4px; overflow: hidden; }
+        .score-bar      { height: 100%; border-radius: 4px; transition: width .4s; }
+        .score-label    { font-size: 0.9rem; font-weight: 700; min-width: 60px; text-align: right; }
+
+        .risk-factors { padding: 12px 20px; border-top: 1px solid #30363d; background: #0d1117; }
+        .risk-factors h4 { font-size: 0.78rem; text-transform: uppercase; color: #f85149; letter-spacing: .06em; margin-bottom: 8px; }
+        .risk-factors ul { list-style: none; }
+        .risk-factors ul li { font-size: 0.82rem; padding: 3px 0; color: #f0a15a; }
+        .risk-factors ul li::before { content: "⚠ "; }
+
+        .clean-note { padding: 12px 20px; border-top: 1px solid #30363d; font-size: 0.82rem; color: #3fb950; }
+        .clean-note::before { content: "✓  "; }
+
+        .ioc-sections { padding: 0 20px 16px; }
+        .ioc-block {
+            background: #0d1117; border: 1px solid #30363d;
+            border-radius: 8px; margin-top: 12px; overflow: hidden;
+        }
+        .ioc-block summary {
+            padding: 10px 14px; cursor: pointer; font-size: 0.83rem;
+            font-weight: 600; color: #58a6ff; list-style: none;
+            display: flex; align-items: center; gap: 8px;
+            user-select: none;
+        }
+        .ioc-block summary::-webkit-details-marker { display: none; }
+        .ioc-block summary::before { content: "▶"; font-size: 0.65rem; }
+        details[open] summary::before { content: "▼"; }
+        .ioc-block summary:hover { background: #161b22; }
+        .ioc-inner { padding: 0 14px 12px; }
+
+        .provider-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em;
+            color: #8b949e; margin: 10px 0 6px; border-bottom: 1px solid #21262d;
+            padding-bottom: 4px;
+        }
+        .ioc-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .ioc-table th {
+            text-align: left; color: #8b949e; font-weight: 400;
+            padding: 3px 12px 3px 0; width: 200px; white-space: nowrap;
+        }
+        .ioc-table td { color: #c9d1d9; font-family: monospace; padding: 3px 0; word-break: break-all; }
+        .ioc-table td.val-malicious { color: #f85149; font-weight: 700; }
+        .ioc-table td.val-clean     { color: #3fb950; }
+
+        .badge {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700; letter-spacing: .04em;
+        }
+        .status-pill {
+            display: inline-block; padding: 1px 8px; border-radius: 4px;
+            font-size: 0.72rem; background: #21262d; color: #8b949e;
+        }
+        footer {
+            text-align: center; color: #30363d; font-size: 0.72rem;
+            padding: 32px; border-top: 1px solid #21262d; margin-top: 40px;
+        }
+        @media (max-width: 600px) {
+            .alert-meta { grid-template-columns: 1fr; }
+            header { padding: 16px; }
+            main   { padding: 16px; }
+        }
+        </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🛡</div>
+    <div>
+      <h1>SOC Workflow Automation — Incident Enrichment Report</h1>
+      <p>Generated: 2026-05-30 10:05:22 UTC</p>
+    </div>
+  </header>
+  <main>
+    <h2 class="section-title">Executive Summary</h2>
+    <div class="summary-grid"><div class="stat-card"><div class="num">3</div><div class="lbl">Total Alerts</div></div><div class="stat-card"><div class="num red">2</div><div class="lbl">Malicious</div></div><div class="stat-card"><div class="num red">1</div><div class="lbl">Critical</div></div><div class="stat-card"><div class="num orange">1</div><div class="lbl">High</div></div><div class="stat-card"><div class="num blue">3</div><div class="lbl">IPs Enriched</div></div><div class="stat-card"><div class="num blue">2</div><div class="lbl">Domains Enriched</div></div><div class="stat-card"><div class="num blue">1</div><div class="lbl">Hashes Enriched</div></div></div>
+
+    <h2 class="section-title">Alert Details</h2>
+    
+            <div class="alert-card">
+              <div class="alert-header">
+                <span class="alert-id">Alert #1: ALT-2026-001</span>
+                <span class="badge" style="background:#f8514922;color:#f85149;border:1px solid #f85149">CRITICAL</span>
+                <span class="badge" style="background:#3d0c0a;color:#f85149;border:1px solid #f85149">MALICIOUS</span>
+                <span class="spacer"></span>
+              </div>
+              <div class="alert-meta"><div class="field">Alert Type</div><div class="value">Malware C2 Communication</div><div class="field">Timestamp</div><div class="value">2026-05-30T08:15:00Z</div><div class="field">Source Host</div><div class="value">WORKSTATION-042</div><div class="field">Source IP</div><div class="value">192.168.1.42</div><div class="field">Destination IP</div><div class="value">185.220.101.45</div><div class="field">Destination Domain</div><div class="value">update.microsoft-cdn.net</div><div class="field">File Name</div><div class="value">system_update.exe</div><div class="field">File Hash MD5</div><div class="value">44d88612fea8a8f36de82e1278abb02f</div><div class="field">Process</div><div class="value">svchost.exe</div><div class="field">SIEM Rule</div><div class="value">TOR_EXIT_NODE_COMMUNICATION</div></div>
+              <div style="padding:8px 20px 12px;font-size:0.82rem;color:#8b949e;border-top:1px solid #30363d">
+                Suspicious outbound connection to Tor exit node with malicious file execution detected by EDR
+              </div>
+              <div class="risk-row">
+                <span style="font-size:0.78rem;color:#8b949e;min-width:80px">Risk Score</span>
+                <div class="score-bar-wrap"><div class="score-bar" style="width:100%;background:#f85149"></div></div><span class="score-label" style="color:#f85149">100/100</span>
+              </div>
+              
+                <div class="risk-factors">
+                  <h4>Risk Factors Identified</h4>
+                  <ul><li>IP 185.220.101.45: 18 VirusTotal malicious detection(s)</li><li>IP 185.220.101.45: AbuseIPDB confidence 100% (115 reports)</li><li>Hash 44d88612fea8a8f36de82e1278abb02f: 64 VirusTotal malicious detection(s)</li></ul>
+                </div>
+              <div class='ioc-sections'>
+            <details class="ioc-block">
+              <summary>IP Address — 185.220.101.45
+                <span class="status-pill">destination_ip</span>
+              </summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-malicious">18</td></tr><tr><th>Suspicious detections</th><td class="">1</td></tr><tr><th>Harmless / Undetected</th><td class="">43 / 29</td></tr><tr><th>Country</th><td class="">DE</td></tr><tr><th>ASN</th><td class="">AS60729 — Stiftung Erneuerbare Freiheit</td></tr><tr><th>Reputation score</th><td class="">-21</td></tr><tr><th>Tags</th><td class="">tor</td></tr></table>
+                <div class="provider-label" style="margin-top:12px">AbuseIPDB</div>
+                <table class="ioc-table"><tr><th>Abuse confidence</th><td>100%</td></tr><tr><th>Total reports</th><td>115 by 67 user(s)</td></tr><tr><th>Country / ISP</th><td>DE / Network for Tor-Exit traffic.</td></tr><tr><th>Usage type</th><td>Commercial</td></tr><tr><th>Whitelisted</th><td>False</td></tr><tr><th>Last reported</th><td>2026-05-29T00:57:42+00:00</td></tr></table>
+              </div>
+            </details>
+            <details class="ioc-block">
+              <summary>Domain — update.microsoft-cdn.net</summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-clean">0</td></tr><tr><th>Suspicious detections</th><td class="">0</td></tr><tr><th>Harmless / Undetected</th><td class="">56 / 35</td></tr><tr><th>Registrar</th><td class="">22net, Inc.</td></tr><tr><th>Reputation score</th><td class="">0</td></tr><tr><th>Categories</th><td class="">none</td></tr><tr><th>Tags</th><td class="">none</td></tr></table>
+              </div>
+            </details>
+            <details class="ioc-block">
+              <summary>File Hash (MD5) — 44d88612fea8a8f36de82e1278abb02f</summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-malicious">64</td></tr><tr><th>Suspicious detections</th><td class="">0</td></tr><tr><th>Harmless / Undetected</th><td class="">0 / 3</td></tr><tr><th>File type</th><td class="">Powershell</td></tr><tr><th>Meaningful name</th><td class="">eicar.com.txt</td></tr><tr><th>File size</th><td class="">68 bytes</td></tr><tr><th>Times submitted</th><td class="">1,148,455</td></tr><tr><th>MD5</th><td class="">44d88612fea8a8f36de82e1278abb02f</td></tr><tr><th>SHA-256</th><td class="">275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f</td></tr><tr><th>Tags</th><td class="">via-tor, direct-cpu-clock-access, powershell, known-distributor, idle, long-sleeps, detect-debug-environment, attachment</td></tr></table>
+              </div>
+            </details></div>
+            </div>
+            <div class="alert-card">
+              <div class="alert-header">
+                <span class="alert-id">Alert #2: ALT-2026-002</span>
+                <span class="badge" style="background:#d2992222;color:#d29922;border:1px solid #d29922">HIGH</span>
+                <span class="badge" style="background:#3d2c00;color:#d29922;border:1px solid #d29922">SUSPICIOUS</span>
+                <span class="spacer"></span>
+              </div>
+              <div class="alert-meta"><div class="field">Alert Type</div><div class="value">Credential Harvesting Attempt</div><div class="field">Timestamp</div><div class="value">2026-05-30T09:30:00Z</div><div class="field">Source Host</div><div class="value">WORKSTATION-019</div><div class="field">Source IP</div><div class="value">192.168.1.19</div><div class="field">Destination IP</div><div class="value">198.20.69.98</div><div class="field">Destination Domain</div><div class="value">login-secure.paypa1.com</div><div class="field">File Name</div><div class="value">—</div><div class="field">File Hash MD5</div><div class="value">—</div><div class="field">Process</div><div class="value">chrome.exe</div><div class="field">SIEM Rule</div><div class="value">PHISHING_DOMAIN_ACCESS</div></div>
+              <div style="padding:8px 20px 12px;font-size:0.82rem;color:#8b949e;border-top:1px solid #30363d">
+                User navigated to suspected phishing domain mimicking PayPal login page
+              </div>
+              <div class="risk-row">
+                <span style="font-size:0.78rem;color:#8b949e;min-width:80px">Risk Score</span>
+                <div class="score-bar-wrap"><div class="score-bar" style="width:40%;background:#d29922"></div></div><span class="score-label" style="color:#d29922">40/100</span>
+              </div>
+              
+                <div class="risk-factors">
+                  <h4>Risk Factors Identified</h4>
+                  <ul><li>IP 198.20.69.98: 8 VirusTotal malicious detection(s)</li></ul>
+                </div>
+              <div class='ioc-sections'>
+            <details class="ioc-block">
+              <summary>IP Address — 198.20.69.98
+                <span class="status-pill">destination_ip</span>
+              </summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-malicious">8</td></tr><tr><th>Suspicious detections</th><td class="">1</td></tr><tr><th>Harmless / Undetected</th><td class="">49 / 33</td></tr><tr><th>Country</th><td class="">US</td></tr><tr><th>ASN</th><td class="">AS32475 — Internap Holding LLC</td></tr><tr><th>Reputation score</th><td class="">-2</td></tr><tr><th>Tags</th><td class="">none</td></tr></table>
+                <div class="provider-label" style="margin-top:12px">AbuseIPDB</div>
+                <table class="ioc-table"><tr><th>Abuse confidence</th><td>2%</td></tr><tr><th>Total reports</th><td>1 by 1 user(s)</td></tr><tr><th>Country / ISP</th><td>US / Internap Holding LLC</td></tr><tr><th>Usage type</th><td>Data Center/Web Hosting/Transit</td></tr><tr><th>Whitelisted</th><td>False</td></tr><tr><th>Last reported</th><td>2026-05-24T16:32:48+00:00</td></tr></table>
+              </div>
+            </details>
+            <details class="ioc-block">
+              <summary>Domain — login-secure.paypa1.com</summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-clean">0</td></tr><tr><th>Suspicious detections</th><td class="">0</td></tr><tr><th>Harmless / Undetected</th><td class="">0 / 91</td></tr><tr><th>Registrar</th><td class="">MarkMonitor Inc.</td></tr><tr><th>Reputation score</th><td class="">0</td></tr><tr><th>Categories</th><td class="">none</td></tr><tr><th>Tags</th><td class="">none</td></tr></table>
+              </div>
+            </details></div>
+            </div>
+            <div class="alert-card">
+              <div class="alert-header">
+                <span class="alert-id">Alert #3: ALT-2026-003</span>
+                <span class="badge" style="background:#388bfd22;color:#388bfd;border:1px solid #388bfd">MEDIUM</span>
+                <span class="badge" style="background:#3d0c0a;color:#f85149;border:1px solid #f85149">MALICIOUS</span>
+                <span class="spacer"></span>
+              </div>
+              <div class="alert-meta"><div class="field">Alert Type</div><div class="value">External Port Scan Detected</div><div class="field">Timestamp</div><div class="value">2026-05-30T11:45:00Z</div><div class="field">Source Host</div><div class="value">EXTERNAL</div><div class="field">Source IP</div><div class="value">80.82.77.33</div><div class="field">Destination IP</div><div class="value">10.0.1.50</div><div class="field">Destination Domain</div><div class="value">—</div><div class="field">File Name</div><div class="value">—</div><div class="field">File Hash MD5</div><div class="value">—</div><div class="field">Process</div><div class="value">—</div><div class="field">SIEM Rule</div><div class="value">EXTERNAL_PORT_SCAN</div></div>
+              <div style="padding:8px 20px 12px;font-size:0.82rem;color:#8b949e;border-top:1px solid #30363d">
+                External host performing TCP SYN scan against DMZ web server on ports 80, 443, 8080, 8443
+              </div>
+              <div class="risk-row">
+                <span style="font-size:0.78rem;color:#8b949e;min-width:80px">Risk Score</span>
+                <div class="score-bar-wrap"><div class="score-bar" style="width:70%;background:#f85149"></div></div><span class="score-label" style="color:#f85149">70/100</span>
+              </div>
+              
+                <div class="risk-factors">
+                  <h4>Risk Factors Identified</h4>
+                  <ul><li>IP 80.82.77.33: 14 VirusTotal malicious detection(s)</li><li>IP 80.82.77.33: AbuseIPDB confidence 100% (8371 reports)</li></ul>
+                </div>
+              <div class='ioc-sections'>
+            <details class="ioc-block">
+              <summary>IP Address — 80.82.77.33
+                <span class="status-pill">source_ip</span>
+              </summary>
+              <div class="ioc-inner">
+                <div class="provider-label">VirusTotal</div>
+                <table class="ioc-table"><tr><th>Malicious detections</th><td class="val-malicious">14</td></tr><tr><th>Suspicious detections</th><td class="">1</td></tr><tr><th>Harmless / Undetected</th><td class="">45 / 31</td></tr><tr><th>Country</th><td class="">NL</td></tr><tr><th>ASN</th><td class="">AS202425 — IP Volume inc</td></tr><tr><th>Reputation score</th><td class="">-87</td></tr><tr><th>Tags</th><td class="">none</td></tr></table>
+                <div class="provider-label" style="margin-top:12px">AbuseIPDB</div>
+                <table class="ioc-table"><tr><th>Abuse confidence</th><td>100%</td></tr><tr><th>Total reports</th><td>8,371 by 500 user(s)</td></tr><tr><th>Country / ISP</th><td>NL / FiberXpress BV</td></tr><tr><th>Usage type</th><td>Data Center/Web Hosting/Transit</td></tr><tr><th>Whitelisted</th><td>False</td></tr><tr><th>Last reported</th><td>2026-05-30T09:34:27+00:00</td></tr></table>
+              </div>
+            </details></div>
+            </div>
+  </main>
+  <footer>
+    SOC Workflow Automation &nbsp;|&nbsp;
+    Enriched via VirusTotal API v3 &amp; AbuseIPDB API v2 &nbsp;|&nbsp;
+    2026-05-30 10:05:22 UTC
+  </footer>
+</body>
+</html>

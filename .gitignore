@@ -1,0 +1,30 @@
+# API keys — never commit
+.env
+
+# Generated reports (keep only the pre-generated examples)
+reports/incident_report_*.json
+reports/incident_report_*.txt
+reports/incident_report_*.html
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

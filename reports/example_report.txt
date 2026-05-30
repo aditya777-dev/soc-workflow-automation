@@ -1,0 +1,145 @@
+==============================================================================
+  SOC WORKFLOW AUTOMATION — INCIDENT ENRICHMENT REPORT
+  Generated : 2026-05-30 10:05:22 UTC
+==============================================================================
+
+EXECUTIVE SUMMARY
+----------------------------------------
+  Total Alerts Processed  : 3
+  CRITICAL                : 1
+  HIGH                    : 1
+  MEDIUM                  : 1
+  IPs Enriched            : 3
+  Domains Enriched        : 2
+  File Hashes Enriched    : 1
+
+==============================================================================
+  ALERT 1: ALT-2026-001  |  Severity: CRITICAL  |  Verdict: MALICIOUS  (Risk: 100/100)
+==============================================================================
+  Alert Type  : Malware C2 Communication
+  Timestamp   : 2026-05-30T08:15:00Z
+  Source      : WORKSTATION-042 [192.168.1.42]
+  Destination : 185.220.101.45
+  Domain      : update.microsoft-cdn.net
+  File        : system_update.exe (MD5: 44d88612fea8a8f36de82e1278abb02f)
+  Process     : svchost.exe
+  Description : Suspicious outbound connection to Tor exit node with malicious file execution detected by EDR
+
+  [!] RISK FACTORS IDENTIFIED:
+      • IP 185.220.101.45: 18 VirusTotal malicious detection(s)
+      • IP 185.220.101.45: AbuseIPDB confidence 100% (115 reports)
+      • Hash 44d88612fea8a8f36de82e1278abb02f: 64 VirusTotal malicious detection(s)
+
+  ┌─ IP ENRICHMENT : 185.220.101.45  [destination_ip]
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 18 / 1
+  │    Harmless / Undetected   : 43 / 29
+  │    Country / ASN            : DE / AS60729 (Stiftung Erneuerbare Freiheit)
+  │    VT Reputation Score      : -21
+  │    Tags                     : tor
+  │
+  │  AbuseIPDB:
+  │    Abuse Confidence Score   : 100%
+  │    Total Reports             : 115 by 67 distinct user(s)
+  │    Country / ISP             : DE / Network for Tor-Exit traffic.
+  │    Usage Type               : Commercial
+  │    Is Whitelisted            : False
+  │    Last Reported             : 2026-05-29T00:57:42+00:00
+  └───────────────────────────────────────────────────────────────────────────
+
+  ┌─ DOMAIN ENRICHMENT : update.microsoft-cdn.net
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 0 / 0
+  │    Harmless / Undetected   : 56 / 35
+  │    Registrar               : 22net, Inc.
+  │    VT Reputation Score      : 0
+  │    Categories              : none
+  │    Tags                    : none
+  └───────────────────────────────────────────────────────────────────────────
+
+  ┌─ FILE HASH ENRICHMENT : 44d88612fea8a8f36de82e1278abb02f
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 64 / 0
+  │    Harmless / Undetected   : 0 / 3
+  │    File Type               : Powershell
+  │    Meaningful Name         : eicar.com.txt
+  │    File Size               : 68 bytes
+  │    Times Submitted         : 1,148,455
+  │    SHA-256                 : 275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f
+  │    Tags                    : via-tor, direct-cpu-clock-access, powershell, known-distributor, idle, long-sleeps, detect-debug-environment, attachment
+  └───────────────────────────────────────────────────────────────────────────
+
+==============================================================================
+  ALERT 2: ALT-2026-002  |  Severity: HIGH  |  Verdict: SUSPICIOUS  (Risk: 40/100)
+==============================================================================
+  Alert Type  : Credential Harvesting Attempt
+  Timestamp   : 2026-05-30T09:30:00Z
+  Source      : WORKSTATION-019 [192.168.1.19]
+  Destination : 198.20.69.98
+  Domain      : login-secure.paypa1.com
+  Process     : chrome.exe
+  Description : User navigated to suspected phishing domain mimicking PayPal login page
+
+  [!] RISK FACTORS IDENTIFIED:
+      • IP 198.20.69.98: 8 VirusTotal malicious detection(s)
+
+  ┌─ IP ENRICHMENT : 198.20.69.98  [destination_ip]
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 8 / 1
+  │    Harmless / Undetected   : 49 / 33
+  │    Country / ASN            : US / AS32475 (Internap Holding LLC)
+  │    VT Reputation Score      : -2
+  │    Tags                     : none
+  │
+  │  AbuseIPDB:
+  │    Abuse Confidence Score   : 2%
+  │    Total Reports             : 1 by 1 distinct user(s)
+  │    Country / ISP             : US / Internap Holding LLC
+  │    Usage Type               : Data Center/Web Hosting/Transit
+  │    Is Whitelisted            : False
+  │    Last Reported             : 2026-05-24T16:32:48+00:00
+  └───────────────────────────────────────────────────────────────────────────
+
+  ┌─ DOMAIN ENRICHMENT : login-secure.paypa1.com
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 0 / 0
+  │    Harmless / Undetected   : 0 / 91
+  │    Registrar               : MarkMonitor Inc.
+  │    VT Reputation Score      : 0
+  │    Categories              : none
+  │    Tags                    : none
+  └───────────────────────────────────────────────────────────────────────────
+
+==============================================================================
+  ALERT 3: ALT-2026-003  |  Severity: MEDIUM  |  Verdict: MALICIOUS  (Risk: 70/100)
+==============================================================================
+  Alert Type  : External Port Scan Detected
+  Timestamp   : 2026-05-30T11:45:00Z
+  Source      : EXTERNAL [80.82.77.33]
+  Destination : 10.0.1.50
+  Description : External host performing TCP SYN scan against DMZ web server on ports 80, 443, 8080, 8443
+
+  [!] RISK FACTORS IDENTIFIED:
+      • IP 80.82.77.33: 14 VirusTotal malicious detection(s)
+      • IP 80.82.77.33: AbuseIPDB confidence 100% (8371 reports)
+
+  ┌─ IP ENRICHMENT : 80.82.77.33  [source_ip]
+  │  VirusTotal:
+  │    Malicious / Suspicious  : 14 / 1
+  │    Harmless / Undetected   : 45 / 31
+  │    Country / ASN            : NL / AS202425 (IP Volume inc)
+  │    VT Reputation Score      : -87
+  │    Tags                     : none
+  │
+  │  AbuseIPDB:
+  │    Abuse Confidence Score   : 100%
+  │    Total Reports             : 8371 by 500 distinct user(s)
+  │    Country / ISP             : NL / FiberXpress BV
+  │    Usage Type               : Data Center/Web Hosting/Transit
+  │    Is Whitelisted            : False
+  │    Last Reported             : 2026-05-30T09:34:27+00:00
+  └───────────────────────────────────────────────────────────────────────────
+
+==============================================================================
+  END OF REPORT
+==============================================================================

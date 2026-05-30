@@ -1,0 +1,47 @@
+[
+  {
+    "alert_id": "ALT-2026-001",
+    "timestamp": "2026-05-30T08:15:00Z",
+    "severity": "CRITICAL",
+    "alert_type": "Malware C2 Communication",
+    "source_host": "WORKSTATION-042",
+    "source_ip": "192.168.1.42",
+    "destination_ip": "185.220.101.45",
+    "destination_domain": "update.microsoft-cdn.net",
+    "file_hash_md5": "44d88612fea8a8f36de82e1278abb02f",
+    "file_name": "system_update.exe",
+    "process": "svchost.exe",
+    "description": "Suspicious outbound connection to Tor exit node with malicious file execution detected by EDR",
+    "rule_triggered": "TOR_EXIT_NODE_COMMUNICATION"
+  },
+  {
+    "alert_id": "ALT-2026-002",
+    "timestamp": "2026-05-30T09:30:00Z",
+    "severity": "HIGH",
+    "alert_type": "Credential Harvesting Attempt",
+    "source_host": "WORKSTATION-019",
+    "source_ip": "192.168.1.19",
+    "destination_ip": "198.20.69.98",
+    "destination_domain": "login-secure.paypa1.com",
+    "file_hash_md5": null,
+    "file_name": null,
+    "process": "chrome.exe",
+    "description": "User navigated to suspected phishing domain mimicking PayPal login page",
+    "rule_triggered": "PHISHING_DOMAIN_ACCESS"
+  },
+  {
+    "alert_id": "ALT-2026-003",
+    "timestamp": "2026-05-30T11:45:00Z",
+    "severity": "MEDIUM",
+    "alert_type": "External Port Scan Detected",
+    "source_host": "EXTERNAL",
+    "source_ip": "80.82.77.33",
+    "destination_ip": "10.0.1.50",
+    "destination_domain": null,
+    "file_hash_md5": null,
+    "file_name": null,
+    "process": null,
+    "description": "External host performing TCP SYN scan against DMZ web server on ports 80, 443, 8080, 8443",
+    "rule_triggered": "EXTERNAL_PORT_SCAN"
+  }
+]
